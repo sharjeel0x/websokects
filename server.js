@@ -1,4 +1,4 @@
-import { WebSocketServer } from "ws";
+import { WebSocketServer, WebSocket } from "ws";
 
 const wss = new WebSocketServer({ port: 8008 });
 
@@ -8,7 +8,15 @@ wss.on("connection", (socket, request) => {
     console.log(rawData);
 
     wss.clients.forEach((client) => {
-      if (client.readyState === 1) client.send(`server Broadcast: ${message}`);
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(`server Broadcast: ${message}`);
+      }
     });
+  });
+  socket.on("error", (err) => {
+    console.error(`Error: ${err} : ${ip} `);
+  });
+  socket.on("close", () => {
+    console.log("Client disconnected");
   });
 });
