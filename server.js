@@ -5,6 +5,7 @@ const wss = new WebSocketServer({ port: 8008 });
 wss.on("connection", (socket, request) => {
   const ip = request.socket.remoteAddress;
   socket.on("message", (rawData) => {
+    const message = rawData.toString()
     console.log(rawData);
 
     wss.clients.forEach((client) => {
@@ -20,3 +21,5 @@ wss.on("connection", (socket, request) => {
     console.log("Client disconnected");
   });
 });
+
+console.log("WebSocket server is live on ws://localhost:8008")
